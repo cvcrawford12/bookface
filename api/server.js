@@ -12,7 +12,7 @@ const socialRoutes = require('./routes/social');
 
 // Intialize database
 mongoose
-  .connect(config.db, { useNewUrlParser: true, useFindAndModify: true })
+  .connect(config.db, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => console.log('Database Connected'))
   .catch((e) => console.log(e));
 
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   // This allows us to access user object without having to pass it from frontend
   res.locals.user = req.user;
   next();
-})
+});
 
 // Use JWT Authentication
 app.use((req, res, next) => {

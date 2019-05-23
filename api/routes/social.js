@@ -15,5 +15,23 @@ module.exports = (app) => {
     .get(loginRequired, socialControllers.getProfileById);
 
   app.route('/profile/addFriend')
-    .post(loginRequired, socialControllers.addFriend);
+    .put(loginRequired, socialControllers.addFriend);
+
+  app.route('/profile/deleteFriend')
+    .delete(loginRequired, socialControllers.deleteFriend);
+
+  app.route('/social/create/post')
+    .post(loginRequired, socialControllers.createNewPost);
+
+  app.route('/social/create/comment')
+    .put(loginRequired, socialControllers.createNewComment);
+
+  app.route('/social/posts')
+    .get(loginRequired, socialControllers.getAllPosts);
+
+  app.route('/social/comments/:postId')
+    .get(loginRequired, socialControllers.getCommentsForPost);
+
+  app.route('/social/post/like')
+    .put(loginRequired, socialControllers.likePost);
 }
