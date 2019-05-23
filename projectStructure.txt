@@ -1,0 +1,28 @@
+Project Structure:
+
+server.js
+/middleware
+  verifyToken
+/routes
+  authRoutes
+  profileRoutes
+  socialRoutes
+/controllers
+  authControllers
+  socialControllers
+  profileControllers
+/src
+  /assets
+    /styles
+      app
+    /svgs
+  /components
+  App.js
+
+Dependencies:
+create-react-app
+react-router-dom
+reactstrap
+body-parser
+express
+jsonwebtokens

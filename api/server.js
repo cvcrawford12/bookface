@@ -1,0 +1,50 @@
+// Require out dependencies for our API
+const express = require('express'),
+      mongoose = require('mongoose'),
+      bodyParser = require('body-parser'),
+      jwt = require('jsonwebtoken'),
+      config = require('./config/secret'),
+      app = express();
+
+// Require Routes (API endpoints)
+const authRoutes = require('./routes/auth');
+
+// Intialize database
+mongoose
+  .connect(config.db, { useNewUrlParser: true })
+  .then(() => console.log('Database Connected'))
+  .catch((e) => console.log(e));
+
+// Use Middlewares
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use((req, res, next) => {
+  // This allows us to access user object without having to pass it from frontend
+  res.locals.user = req.user;
+  next();
+})
+
+// Use JWT Authentication
+app.use((req, res, next) => {
+  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    jwt.verify(req.headers.authorization.split(' ')[1], config.key, (err, decoded) => {
+      if (err) {
+        req.user = undefined;
+        next();
+      } else {
+        req.user = decoded;
+        next();
+      }
+    });
+  } else {
+    req.user = undefined;
+    next();
+  }
+})
+
+// Instantiate Routes
+authRoutes(app);
+
+app.listen(process.env.PORT || config.port, () => {
+  console.log(`Server running on port ${config.port}`);
+});
