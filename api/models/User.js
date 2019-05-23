@@ -21,7 +21,16 @@ const UserSchema = new Schema({
     required: true
   },
   avatar: String,
-  friends: [{type: Schema.Types.ObjectId, ref: 'User'}]
+  friends: [{type: Schema.Types.ObjectId, ref: 'users'}],
+  bio: {
+    type: String,
+    required: true,
+    maxlength: 2000
+  },
+  hobbies: [String],
+  location: String,
+  favBand: String,
+  favMovie: String
 },
 {
     timestamps: true,

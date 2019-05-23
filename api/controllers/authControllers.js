@@ -1,6 +1,5 @@
 // Require dependencies
-const express = require('express'),
-      jwt = require('jsonwebtoken'),
+const jwt = require('jsonwebtoken'),
       bcrypt = require('bcryptjs')
       User = require('../models/User'),
       config = require('../config/secret');
