@@ -2,7 +2,8 @@
 const express = require('express'),
       mongoose = require('mongoose'),
       bodyParser = require('body-parser'),
-      jwt = require('jsonwebtoken'),
+      jwt = require('jsonwebtoken')
+      cors = require('cors'),
       config = require('./config/secret'),
       app = express();
 
@@ -19,6 +20,9 @@ mongoose
 // Use Middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+// Allow CORS (cross-origin) requests and non-standard methods (e.g. PUT/DELETE)
+app.use(cors())
+app.options('*', cors())
 app.use((req, res, next) => {
   // This allows us to access user object without having to pass it from frontend
   res.locals.user = req.user;

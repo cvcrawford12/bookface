@@ -24,7 +24,6 @@ const UserSchema = new Schema({
   friends: [{type: Schema.Types.ObjectId, ref: 'users'}],
   bio: {
     type: String,
-    required: true,
     maxlength: 2000
   },
   hobbies: [String],

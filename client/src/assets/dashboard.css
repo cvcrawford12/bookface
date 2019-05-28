@@ -1,0 +1,82 @@
+.profile-backdrop {
+  max-height: 10rem;
+  object-fit: cover;
+}
+
+.triangle-hr {
+  border-top: 1px solid dodgerblue;
+  position:relative;
+  margin-top: 1rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+}
+
+.triangle-hr:after{
+  content: '';
+  position:absolute;
+  left: calc(50% - 10px);
+  top: -10px;
+  width: 10px;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent dodgerblue transparent;
+}
+.triangle-hr:before{
+  content: '';
+  position:absolute;
+  left: calc(50% - 10px);
+  top: -9px;
+  width: 10px;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent #fff transparent;
+  z-index: 10;
+}
+
+.profile-card {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 0.25rem !important;
+  -webkit-box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.25);
+  margin-bottom: 0.5rem;
+}
+
+.profile-col {
+  padding: 0 0.2rem;
+}
+
+.profile-header > .card-body {
+  padding-bottom: 0 !important;
+}
+
+.profile-row {
+  margin: 0 0.5rem;
+}
+
+.about-list li:first-child {
+  border-top: none !important;
+}
+
+.about-list > li {
+  padding: 0.5rem 0.75rem;
+}
+
+.button-group {
+  width: 90%;
+}
+
+.button-group button {
+  padding: 0.4rem 0.8rem;
+  background: none;
+  outline: none;
+  color: #3b5998;
+  border: none;
+  border-left: 1px solid rgba(150, 150, 150, 0.7);;
+}
+
+.button-group:last-child {
+  border-right: 1px solid rgba(150, 150, 150, 0.7);
+}
