@@ -10,6 +10,9 @@ module.exports = (app) => {
   app.route('/profile/all')
     .get(loginRequired, socialControllers.getAllUsers);
 
+  app.route('/friends/all')
+    .post(loginRequired, socialControllers.getAllFriends);
+
   // Returns a specific users profile
   app.route('/profile/user/:id')
     .get(loginRequired, socialControllers.getProfileById);
@@ -18,7 +21,10 @@ module.exports = (app) => {
     .put(loginRequired, socialControllers.addFriend);
 
   app.route('/profile/deleteFriend')
-    .delete(loginRequired, socialControllers.deleteFriend);
+    .put(loginRequired, socialControllers.deleteFriend);
+
+  app.route('/profile/edit')
+    .put(loginRequired, socialControllers.editProfile);
 
   app.route('/social/create/post')
     .post(loginRequired, socialControllers.createNewPost);
@@ -32,6 +38,9 @@ module.exports = (app) => {
   app.route('/social/comments/:postId')
     .get(loginRequired, socialControllers.getCommentsForPost);
 
-  app.route('/social/post/like')
+  app.route('/social/post/like/:postId')
     .put(loginRequired, socialControllers.likePost);
+
+  app.route('/social/post/unlike/:postId')
+    .put(loginRequired, socialControllers.unlikePost);
 }

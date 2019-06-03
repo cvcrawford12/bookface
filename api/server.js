@@ -2,23 +2,28 @@
 const express = require('express'),
       mongoose = require('mongoose'),
       bodyParser = require('body-parser'),
-      jwt = require('jsonwebtoken'),
+      jwt = require('jsonwebtoken')
+      cors = require('cors'),
       config = require('./config/secret'),
       app = express();
 
 // Require Routes (API endpoints)
 const authRoutes = require('./routes/auth');
 const socialRoutes = require('./routes/social');
+const apiRoutes = require('./routes/api');
 
 // Intialize database
 mongoose
-  .connect(config.db, { useNewUrlParser: true, useFindAndModify: false })
+  .connect(config.db, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => console.log('Database Connected'))
   .catch((e) => console.log(e));
 
 // Use Middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+// Allow CORS (cross-origin) requests and non-standard methods (e.g. PUT/DELETE)
+app.use(cors())
+app.options('*', cors())
 app.use((req, res, next) => {
   // This allows us to access user object without having to pass it from frontend
   res.locals.user = req.user;
@@ -46,6 +51,7 @@ app.use((req, res, next) => {
 // Instantiate Routes
 authRoutes(app);
 socialRoutes(app);
+apiRoutes(app);
 
 app.listen(process.env.PORT || config.port, () => {
   console.log(`Server running on port ${config.port}`);

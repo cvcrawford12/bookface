@@ -1,0 +1,29 @@
+.landing {
+  position: relative;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./images/landing.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 95vh;
+  color: #fff;
+  margin-top: -2rem;
+  margin-bottom: 0;
+}
+
+.landing-inner {
+  padding-top: 20%;
+  text-align: center;
+}
+
+.landing-inner h3 {
+  padding-bottom: 1rem
+}
+
+.fas.fa-book {
+  color: #fff;
+}
+
+@media (max-width: 648px) {
+  .landing-inner {
+    padding-top: 40%
+  }
+}

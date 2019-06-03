@@ -1,0 +1,255 @@
+.profile-backdrop {
+  max-height: 10rem;
+  object-fit: cover;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.triangle-hr {
+  border-top: 1px solid dodgerblue;
+  position:relative;
+  margin-top: 1rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+}
+
+.triangle-hr:after{
+  content: '';
+  position:absolute;
+  left: calc(50% - 10px);
+  top: -10px;
+  width: 10px;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent dodgerblue transparent;
+}
+.triangle-hr:before{
+  content: '';
+  position:absolute;
+  left: calc(50% - 10px);
+  top: -9px;
+  width: 10px;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent #fff transparent;
+  z-index: 10;
+}
+
+.profile-card, .friend-card {
+  border: none !important;
+  border-radius: 0.25rem !important;
+  -webkit-box-shadow: 0 0.5rem 0.9rem rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 0.5rem 0.9rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0.5rem 0.9rem rgba(0, 0, 0, 0.25);
+  margin-bottom: 0.5rem;
+}
+
+.profile-col {
+  padding: 0 0.2rem;
+}
+
+.profile-header > .card-body {
+  padding-bottom: 0 !important;
+}
+
+.profile-row {
+  margin: 0 0.5rem;
+}
+
+.about-list li:first-child,
+.favorites-list li:first-child {
+  border-top: none !important;
+}
+
+.about-list li {
+  font-size: 0.8rem;
+}
+
+.about-list > li,
+.favorites-list > li {
+  padding: 0.5rem 0.75rem;
+  text-transform: capitalize;
+}
+
+.hobby-list li {
+  padding: 0.2rem 0;
+}
+
+.button-group {
+  width: 90%;
+}
+
+.button-group button {
+  padding: 0.4rem 0.8rem;
+  background: none;
+  outline: none;
+  color: #3b5998;
+  border: none;
+  border-left: 1px solid rgba(150, 150, 150, 0.7);;
+}
+
+.button-group:last-child {
+  border-right: 1px solid rgba(150, 150, 150, 0.7);
+}
+
+.post-btn {
+  margin-bottom: 0.5rem;
+  background: #3b5998;
+}
+
+.post-btn .fas.fa-plus {
+  color: #fff;
+}
+
+.profile-img, .profile-img-top, .comment-img {
+  max-width: 15%;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.comment-img {
+  max-width: 10%;
+}
+
+.profile-img-top {
+  position: absolute;
+  left: 10%;
+  top: 35%;
+}
+
+.profile-img-top,
+.profile-img,
+.comment-img {
+  border: 1px solid #333;
+}
+
+.hobby-text {
+  padding: 0 0.5rem;
+  margin-bottom: 0.1rem;
+  text-transform: capitalize;
+}
+
+.hobby-header {
+  width: 100%;
+}
+
+.post-author,
+.post-author a,
+.post-author:hover {
+  color: var(--primary-color);
+}
+
+/* Comment Bubble Markup */
+.datestamp {
+  display: block;
+  text-align: left;
+  font-weight: lighter;
+  font-size: 0.8em !important;
+  margin-bottom: 1px;
+  color: #e5e5e5;
+}
+
+.comment-text {
+  padding-left: 8px;;
+  font-size: 0.9rem;
+  color: #333
+}
+
+.comments-list {
+  max-height: 25rem;
+  overflow-y: scroll;
+}
+
+
+/** ios1-ios6 bubbles **/
+.bubble {
+  display: inline-block;
+  box-sizing: border-box;
+  font-size: 0.9em;
+  width: 90%;
+  position: relative;
+  clear: both;
+  background: #e7e7ee;
+  border: solid 1px rgba(0,0,0,0.0);
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+
+  -webkit-box-shadow: inset 0 4px 5px rgba(255,255,255,0.65), 0 1px 2px rgba(0,0,0,0.2);
+  -moz-box-shadow: inset 0 4px 5px rgba(255,255,255,0.65), 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: inset 0 4px 5px rgba(255,255,255,0.65), 0 1px 2px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+  padding: 6px 20px;
+  margin-left: 10%;
+  color: #333;
+  word-wrap: break-word;
+}
+
+.bubble:before, .bubble:after {
+  border-radius: 20px / 5px;
+  content: '';
+  display: block;
+  position: absolute;
+}
+
+
+.bubble:after {
+  border: 8px solid transparent;
+  border-bottom-color: #e7e7ee; /* arrow color */
+  bottom: 1px;
+  left: -5px;
+}
+
+.bubble p {
+  color: #333;
+  margin-bottom: 0;
+}
+
+.comment-input {
+  width: 100%;
+}
+
+
+.comment-input input {
+  border-radius: 5rem;
+}
+
+.emojis {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.emojis i:nth-child(2) {
+  position: relative;
+  left: -2px;
+  color: orange;
+}
+
+.emojis i:nth-child(3) {
+  position: relative;
+  left: -4px;
+  color: red;
+}
+
+.fas.fa-comments {
+  color: #fff;
+}
+
+.comment-input button {
+  border-top-right-radius: 5rem;
+  border-bottom-right-radius: 5rem;
+}
+
+@media (max-width: 648px) {
+  .profile-img-top {
+    left: 5%;
+    top: 45%;
+    max-width: 25%;
+  }
+
+  .about-list li, .hobby-text {
+    font-size: 0.9rem;
+  }
+}

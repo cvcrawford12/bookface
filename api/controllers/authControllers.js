@@ -41,8 +41,23 @@ exports.login = (req, res) => {
     if (!user.comparePassword(req.body.password, user.password)) {
       return res.status(401).json({ message: 'Authentication failed, incorrect password for username'})
     }
-    return res.status(200).json({ token: jwt.sign({ username: user.username, _id: user._id }, config.key) });
+    return res.status(200).json({ user, token: jwt.sign({ username: user.username, _id: user._id }, config.key) });
   })
+}
+
+exports.getProfile = (req, res) => {
+  User
+    .findOne({ _id: req.user._id })
+    .populate({
+      path: 'friends',
+      select: 'firstName lastName'
+    })
+    .exec((error, user) => {
+      if (error) {
+        return res.status(400).json({error, message: 'Cannot fetch profile'});
+      }
+      return res.status(200).json({user});
+    })
 }
 
 // Middleware to protect routes that you need to be logged in to see

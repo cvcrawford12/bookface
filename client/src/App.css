@@ -1,33 +1,96 @@
-.App {
-  text-align: center;
+@import "assets/landing.css";
+@import "assets/dashboard.css";
+@import "assets/friends.css";
+
+#root {
+  background: rgb(220, 220, 220);
+  height: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
+#root > div {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#root .navbar {
+  flex-shrink: 0;
+  z-index: 99;
+  color: #fff;
+  background: var(--primary-color);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#root .wrapper {
+  flex: 1
+}
+
+#root .wrapper {
+  padding-top: 5rem;
+}
+
+.plain-btn,
+.plain-btn:hover,
+.plain-btn:focus,
+.plain-btn:active {
+  background: none;
+  outline: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  align-self: flex-start;
+}
+
+.overflow-scroll {
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+h5 {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+/* Override bootstrap styling */
+.nav-link,
+.nav-link:hover,
+.nav-link:focus,
+.nav-link:active,
+.navbar-brand,
+.navbar-brand:hover,
+.navbar-brand:focus,
+.navbar-brand:active {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.primary-bg {
+  background: var(--primary-color);
+}
+
+.primary-bg:hover {
+  background: var(--primary-dark);
+}
+
+.primary-font {
+  color: var(---primary-color);
+}
+
+.clickable, .clickable:hover {
+  cursor: pointer;
+}
+
+.fas {
+  color: var(--primary-color);
 }

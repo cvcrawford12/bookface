@@ -13,6 +13,18 @@ exports.getAllUsers = (req, res) => {
     })
 }
 
+exports.getAllFriends = (req, res) => {
+  User
+    .find({})
+    .where('_id').in(req.body.friends)
+    .exec((error, users) => {
+      if (error) {
+        return res.status(400).json({error, message: 'Trouble finding friends'});
+      }
+      return res.status(200).json({users});
+    })
+}
+
 exports.getProfileById = (req, res) => {
   if (!req.params.id) {
     return res.status(400).json({message: "Please provide an id parameter"});
@@ -70,6 +82,15 @@ exports.deleteFriend = (req, res) => {
   )
 }
 
+exports.editProfile = (req, res) => {
+  User.findOneAndUpdate({ _id: req.user._id }, req.body, { new: true }, (error, user) => {
+    if (error) {
+      return res.status(400).json({ error, message: 'Trouble updating user'});
+    }
+    return res.status(200).json({user});
+  });
+}
+
 exports.getAllPosts = (req, res) => {
   Post.find({})
     .sort({createdAt: -1})
@@ -77,11 +98,11 @@ exports.getAllPosts = (req, res) => {
       path: 'author',
       select: 'firstName lastName'
     })
-    .exec((error, post) => {
+    .exec((error, posts) => {
       if (error) {
         return res.status(400).json({error, message: 'Trouble retrieving posts'});
       }
-      return res.status(200).json({post});
+      return res.status(200).json({posts});
     });
 }
 
@@ -146,23 +167,37 @@ exports.getCommentsForPost = (req, res) => {
 }
 
 exports.likePost = (req, res) => {
-  if (!req.body.postId) {
+  if (!req.params.postId) {
     return res.status(400).json({message: 'Please provide a postId'});
   }
   Post
     .findOneAndUpdate(
-      {_id: req.body.postId},
+      {_id: req.params.postId},
       {$push: {usersLiked: req.user._id}},
       {new: true}
     )
-    .populate({
-      path: 'usersLiked',
-      select: 'firstName lastName'
-    })
     .exec((error, post) => {
       if (error) {
         return res.status(400).json({error, message: 'Trouble liking post'});
       }
-      return res.status(200).json({usersLiked: post.usersLiked});
+      return res.status(200).json({post});
     })
+}
+
+exports.unlikePost = (req, res) => {
+  if (!req.params.postId) {
+    return res.status(400).json({message: 'Please provide a postId'});
+  }
+  Post
+    .findOneAndUpdate(
+      {_id: req.params.postId},
+      {$pull: {usersLiked: req.user._id}},
+      {new: true},
+      (error, post) => {
+        if (error) {
+          return res.status(400).json({error, message: 'Trouble liking post'});
+        }
+        return res.status(200).json({post});
+      }
+    )
 }

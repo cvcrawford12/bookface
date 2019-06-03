@@ -9,4 +9,7 @@ module.exports = (app) => {
 
   app.route('/auth/login')
     .post(authControllers.login);
+
+  app.route('/auth/profile')
+    .get(authControllers.loginRequired, authControllers.getProfile);
 }
