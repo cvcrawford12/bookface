@@ -10,10 +10,11 @@ const express = require('express'),
 // Require Routes (API endpoints)
 const authRoutes = require('./routes/auth');
 const socialRoutes = require('./routes/social');
+const apiRoutes = require('./routes/api');
 
 // Intialize database
 mongoose
-  .connect(config.db, { useNewUrlParser: true, useFindAndModify: false })
+  .connect(config.db, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => console.log('Database Connected'))
   .catch((e) => console.log(e));
 
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
 // Instantiate Routes
 authRoutes(app);
 socialRoutes(app);
+apiRoutes(app);
 
 app.listen(process.env.PORT || config.port, () => {
   console.log(`Server running on port ${config.port}`);

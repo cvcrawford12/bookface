@@ -1,61 +1,87 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
-import { Row, Col, Card, CardBody, CardImg, CardTitle, CardColumns, ListGroup, ListGroupItem, ButtonGroup, Button } from 'reactstrap';
+import { Row, Col, Card, CardImg } from 'reactstrap';
 import Photo from '../../assets/images/landing.jpg';
+import Profile from '../../assets/images/profile.jpeg';
 import { AppContext } from '../../App';
-import DashboardContainer from '../../containers/DashboardContainer';
 import AboutSection from './AboutSection';
+import EditAboutSection from './EditAboutSection';
+import Context from '../../actions/Context';
+import ProfileCard from '../friends/ProfileCard';
 
 class ProfileView extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
     this.state = {
-      user: {}
+      user: {},
+      showFriendsTab: false
     }
   }
 
   componentDidMount() {
-    if (!Object.keys(this.props.user).length) {
-      this.props.loginUser();
+    if (this.props.match && this.props.match.params.id) {
+      this.fetchProfile(this.props.match.params.id);
+    }
+  }
+
+  fetchProfile(id) {
+    Context
+      .fetchWrapper(`/profile/user/${id}`, { method: 'GET' })
+      .then((json) => this.setState({ user: json.user }))
+      .catch((e) => console.error(e));
+  }
+
+  toggleEdit() {
+    const url = window.location.pathname.includes('edit') ? '/dashboard' : '/dashboard/profile/edit';
+    this.props.history.push(url);
+  }
+
+  toggleFriendsTab() {
+    if (!this.props.history.location.pathname.includes('edit')) {
+      this.setState({ showFriendsTab: !this.state.showFriendsTab });
     }
   }
 
   render() {
     const user = !Object.keys(this.state.user).length ? this.props.user : this.state.user;
+    const location = this.props.history.location.pathname;
     return (
-      <CardColumns>
-        <Col md="8">
-          <Row className="profile-row">
+      <React.Fragment>
+        <Row className="profile-row d-flex flex-wrap">
+          <Col md="12" className="profile-col">
+            <Card className="profile-card">
+              <CardImg src={Photo} className="img-fluid profile-backdrop"/>
+              <img className="profile-img-top" alt={"Profile Image"} src={Profile} />
+              <div className="d-inline-flex flex-row-reverse button-group">
+                <button onClick={this.toggleFriendsTab}>Friends</button>
+                <button>Photos</button>
+                {!location.includes('/profile') && <button onClick={this.toggleEdit}>{location.includes('edit') ? 'Dashboard' : 'Edit'}</button>}
+                <a onClick={this.toggleFriendsTab} className="pr-4 align-self-center m-0 clickable">{Context.fullName(user)}</a>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+        <Row className="profile-row">
+          {!location.includes('edit') && !this.state.showFriendsTab &&
+            <AboutSection user={user} loading={this.props.loading} posts={this.props.posts}/>
+          }
+          {location.includes('edit') && !this.state.showFriendsTab &&
+            <EditAboutSection user={this.props.user}/>
+          }
+          {this.state.showFriendsTab &&
             <Col md="12" className="profile-col">
-              <Card className="profile-card">
-                <CardImg src={Photo} className="img-fluid profile-backdrop"/>
-                <div className="d-inline-flex flex-row-reverse button-group">
-                  <button>Friends</button>
-                  <button>Photos</button>
-                  <button>Edit</button>
-                </div>
-              </Card>
+              <h5>Friends</h5>
+              {user.friends.length ? user.friends.map((friend, index) => {
+                console.log(friend);
+                return (
+                  <ProfileCard key={index} addOrDeleteFriend={this.props.addOrDeleteFriend} isFriendsTab={true} user={friend} />
+                )
+              }) : null}
             </Col>
-          </Row>
-          <Row className="profile-row">
-            <AboutSection user={user}/>
-              <Col md="5" className="profile-col">
-                <Card className="profile-card">
-                  <CardBody>
-                    <h5>About</h5>
-                    <ListGroup className="about-list" flush>
-                      <ListGroupItem><i className="fas fa-graduation-cap"></i> Studied at Cal Poly San Luis Obispo</ListGroupItem>
-                      <ListGroupItem><i className="fas fa-graduation-cap"></i> Studied at Cal Poly San Luis Obispo</ListGroupItem>
-                      <ListGroupItem><i className="fas fa-graduation-cap"></i> Studied at Cal Poly San Luis Obispo</ListGroupItem>
-                    </ListGroup>
-                  </CardBody>
-                </Card>
-              </Col>
-          </Row>
-        </Col>
-      </CardColumns>
+          }
+        </Row>
+      </React.Fragment>
     )
   }
 }
@@ -66,6 +92,6 @@ class ProfileView extends Component {
 
 export default props => (
   <AppContext.Consumer>
-    {context => <ProfileView {...props} user={context.auth.user} loginUser={context.auth.loginUser}/>}
+    {context => <ProfileView {...props} addOrDeleteFriend={context.social.addOrDeleteFriend} loading={context.social.loading} user={context.auth.user}/>}
   </AppContext.Consumer>
 );

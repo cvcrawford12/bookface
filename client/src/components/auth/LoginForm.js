@@ -25,7 +25,7 @@ class LoginForm extends Component {
                 <p className="text-danger">{this.props.auth.authError}</p>
               }
               <FormGroup>
-                <Button color="primary">Log In</Button>
+                <Button className="primary-bg">Log In</Button>
               </FormGroup>
             </AvForm>
           </CardBody>

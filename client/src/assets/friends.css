@@ -1,0 +1,59 @@
+.friends-tabs {
+  border-bottom: 1px solid var(--primary-color);
+  padding-top: 1rem;
+}
+
+.friends-tabs > .nav-item .nav-link {
+  border: none;
+  color: var(--primary-color);
+}
+
+.friends-tabs > .nav-item .nav-link.active {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.friend-card {
+  /* width: 100%; */
+  height: 100px;
+  padding: 0;
+  border-radius: 0 !important;
+  border: none;
+}
+
+.friend-card div {
+  width: 100%;
+  height: 100px;
+  display: inline-flex;
+  align-items: center;
+  padding-right: 1rem;
+  flex-direction: row;
+  padding-left: 110px;
+}
+
+.friend-card img {
+  border-radius: 0;
+  width: auto;
+  height: 100px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.friend-title a,
+.friend-title a:hover,
+.friend-title a:active {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+.friend-card button {
+  margin-left: auto;
+}
+
+.friend-card button,
+.friend-card button i {
+  color: #fff;
+}

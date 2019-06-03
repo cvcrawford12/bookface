@@ -14,7 +14,7 @@ class Header extends Component {
     super(props);
     autoBind(this);
     this.state = {
-
+      toggle: false
     }
   }
 
@@ -24,20 +24,33 @@ class Header extends Component {
     });
   }
 
+  logout() {
+    this.props.clearStore();
+    this.props.history.push('/login');
+  }
+
   render() {
-    const isAuthenticated = store.get('token') !== undefined;
+    const pathname = this.props.history.location.pathname;
     return (
       <Navbar expand="md" className="p-1" fixed="top">
         <Container fluid>
-          <NavbarBrand tag={Link} to="/"><img src={Logo} width={70} alt="Bookface" /> Bookface</NavbarBrand>
+          <NavbarBrand tag={Link} to={this.props.isAuthenticated ? '/dashboard' : '/'}><i className="fas fa-book pr-2"></i> Bookface</NavbarBrand>
           <React.Fragment>
             <NavbarToggler onClick={this.toggle}/>
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
-                {isAuthenticated ?
-                  <NavItem onClick={this.logout}>Log Out</NavItem>
-                  :
-                  <NavItem><NavLink tag={Link} to="login">Log In</NavLink></NavItem>
+                {this.props.isAuthenticated &&
+                  <React.Fragment>
+                    <NavItem><NavLink tag={Link} to="/users">All Users</NavLink></NavItem>
+                    <NavItem onClick={this.logout} className="clickable ml-2 align-self-center">Log Out</NavItem>
+                  </React.Fragment>
+                }
+                {!this.props.isAuthenticated &&
+                  <NavItem>
+                    <NavLink tag={Link} to={pathname.includes('/login') ? '/register' : '/login'}>
+                      {pathname.includes('/login') ? 'Register' : 'Log In'}
+                    </NavLink>
+                  </NavItem>
                 }
               </Nav>
             </Collapse>
@@ -49,6 +62,9 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-};
+  isAuthenticated: PropTypes.bool.isRequired,
+  clearStore: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
+}
 
 export default Header;

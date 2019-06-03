@@ -8,8 +8,8 @@ export default (props) => {
         <div className="d-flex flex-column justify-content-center align-items-center">
           <h3>Welcome to Bookface! Connect and Share With Friends</h3>
           <div>
-            <Button onClick={() => props.history.push('/login')} color="primary mr-2">Login</Button>
-            <Button onClick={() => props.history.push('/register')} color="primary">Sign Up</Button>
+            <Button onClick={() => props.history.push('/login')} className="primary-bg mr-2">Login</Button>
+            <Button onClick={() => props.history.push('/register')} className="primary-bg">Sign Up</Button>
           </div>
         </div>
       </Container>

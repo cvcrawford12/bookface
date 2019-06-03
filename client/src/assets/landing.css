@@ -5,10 +5,25 @@
   background-position: center;
   height: 95vh;
   color: #fff;
-  margin-top: -1.2rem;
+  margin-top: -2rem;
   margin-bottom: 0;
 }
 
 .landing-inner {
   padding-top: 20%;
+  text-align: center;
+}
+
+.landing-inner h3 {
+  padding-bottom: 1rem
+}
+
+.fas.fa-book {
+  color: #fff;
+}
+
+@media (max-width: 648px) {
+  .landing-inner {
+    padding-top: 40%
+  }
 }

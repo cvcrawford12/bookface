@@ -41,7 +41,7 @@ class RegisterForm extends Component {
                 <p className="text-danger">{this.props.auth.authError}</p>
               }
               <FormGroup>
-                <Button color="primary">Register</Button>
+                <Button className="primary-bg">Register</Button>
               </FormGroup>
             </AvForm>
           </CardBody>

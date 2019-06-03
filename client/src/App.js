@@ -12,6 +12,9 @@ import Landing from './components/layout/Landing';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/register/RegisterForm';
 import DashboardContainer from './containers/DashboardContainer';
+import FriendsList from './components/friends/FriendsList';
+import RegisterDetails from './components/register/RegisterDetails';
+import ProfileContainer from './containers/ProfileContainer';
 
 const history = createBrowserHistory();
 export const AppContext = React.createContext();
@@ -22,29 +25,36 @@ class App extends Component {
     autoBind(this);
     this.state = {
       user: {},
-      authError: ''
+      authError: '',
+      isAuthenticated: false,
+      posts: [],
+      loadingPosts: false
     }
   }
   componentDidMount() {
     if (store.get('token')) {
-      // this.loginUser();
+      this.loginUser();
     }
   }
 
   clearStore() {
     store.clearAll();
-    this.setState({ user: {} });
+    this.setState({ user: {}, isAuthenticated: false });
   }
 
-  loginUser(values) {
+  loginUser(values = null) {
+    const pathname = window.location.pathname;
+    const pushToDash = pathname.includes('/login') || pathname.includes('/register') || pathname === '/';
     Context.loginUser(values)
       .then(json => {
-        this.setState({user: json.user});
+        this.setState({user: json.user, isAuthenticated: true });
         // Only set token if we don't already have one
         if (!store.get('token')){
           store.set('token', json.token);
         }
-        history.push('/dashboard');
+        if (pushToDash) {
+          history.push('/dashboard');
+        }
       })
       .catch(e => {
         this.setState({ authError: e.message });
@@ -55,10 +65,11 @@ class App extends Component {
   }
 
   registerUser(values) {
-    Context.registerUser(values)
+    Context.fetchWrapper('/auth/register', {method: 'POST', body: JSON.stringify(values)})
       .then((json) => {
         this.setState({ user: json.user });
         store.set('token', json.token);
+        history.push('/register/details');
       })
       .catch((e) => {
         this.setState({ authError: e.message });
@@ -66,6 +77,41 @@ class App extends Component {
         console.error(e);
         setTimeout(() => this.setState({ authError: ''}), 2000);
       })
+  }
+
+  editProfile(values) {
+    Context.editProfile(values)
+      .then((json) => {
+        this.setState({ user: json.user });
+        console.log(history, history.location);
+        if (history.location.pathname.includes('/register')) {
+          history.push('/dashboard');
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+  }
+
+  addOrDeleteFriend(id, shouldDelete) {
+    return new Promise((resolve, reject) => {
+      Context
+      .fetchWrapper(`/profile/${shouldDelete ? 'deleteFriend' : 'addFriend'}`, { method: 'PUT', body: JSON.stringify({id}) })
+      .then((json) => {
+        this.setState({ user: json.user });
+        resolve(json.user);
+      })
+      .catch((e) => reject(e));
+    })
+  }
+
+  fetchPosts() {
+    this.setState({ loadingPosts: true });
+    Context.fetchWrapper('/social/posts', {
+      method: 'GET'
+    }).then((json) => {
+      this.setState({ posts: json.posts, loadingPosts: false });
+    }).catch((e) => console.error(e));
   }
 
   providers() {
@@ -76,7 +122,14 @@ class App extends Component {
         registerUser: this.registerUser,
         authError: this.state.authError
       },
-      clearStore: this.clearStore,
+      social: {
+        posts: this.state.posts,
+        fetchPosts: this.fetchPosts,
+        editProfile: this.editProfile,
+        loading: this.state.loadingPosts,
+        addOrDeleteFriend: this.addOrDeleteFriend
+      },
+      clearStore: this.clearStore
     }
   }
 
@@ -85,13 +138,17 @@ class App extends Component {
     return (
       <AppContext.Provider value={this.providers()}>
         <Router history={history}>
-          <Header />
+          <Header clearStore={this.clearStore} history={history} isAuthenticated={this.state.isAuthenticated}/>
           <div className="wrapper">
             <Route exact path="/" component={Landing}/>
             <Switch>
-              <Route path="/login" component={LoginForm}/>
-              <Route path="/register" component={RegisterForm}/>
-              <Route path="/dashboard" component={DashboardContainer}/>
+              <Route exact path="/login" component={LoginForm}/>
+              <Route exact path="/register" component={RegisterForm}/>
+              <Route exact path="/register/details" component={RegisterDetails}/>
+              <Route exact path="/dashboard" component={DashboardContainer}/>
+              <Route exact path="/dashboard/profile/edit" component={DashboardContainer}/>
+              <Route exact path="/users" component={FriendsList} />
+              <Route path="/profile/:id" component={ProfileContainer}/>
             </Switch>
           </div>
         </Router>
