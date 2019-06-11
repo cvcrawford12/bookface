@@ -5,6 +5,7 @@ const express = require('express'),
       jwt = require('jsonwebtoken')
       cors = require('cors'),
       config = require('./config/secret'),
+      path = require('path'),
       app = express();
 
 if (process.env.NODE_ENV !== 'production') {
@@ -56,6 +57,15 @@ app.use((req, res, next) => {
 authRoutes(app);
 socialRoutes(app);
 apiRoutes(app);
+
+// Pass all routes to index file from webpack build
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(__dirname));
+  app.use(express.static(path.resolve(__dirname + '../../client/build')));
+  app.get('*', (res, res) => {
+    res.sendFile(path.resolve(__dirname + '../../client/build/index.html'));
+  })
+}
 
 app.listen(process.env.PORT || config.port, () => {
   console.log(`Server running on port ${config.port}`);
