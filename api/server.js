@@ -12,11 +12,6 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-// Require Routes (API endpoints)
-const authRoutes = require('./routes/auth');
-const socialRoutes = require('./routes/social');
-const apiRoutes = require('./routes/api');
-
 // Intialize database
 mongoose
   .connect(process.env.DB, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
@@ -56,6 +51,11 @@ app.use((req, res, next) => {
     next();
   }
 })
+
+// Require Routes (API endpoints)
+const authRoutes = require('./routes/auth');
+const socialRoutes = require('./routes/social');
+const apiRoutes = require('./routes/api');
 
 // Instantiate Routes
 authRoutes(app);
