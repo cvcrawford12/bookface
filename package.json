@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Outer package for starting both dev and api servers",
   "main": "server.js",
-  "homepage": "https://bookface-mock.herokuapp.com/",
+  "homepage": "https://bookface-mock.herokuapp.com",
   "scripts": {
     "start": "cd api && npm run start",
     "server-dev": "npm run start-dev --prefix api",

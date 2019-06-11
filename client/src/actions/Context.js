@@ -1,6 +1,6 @@
 import store from 'store-js';
 import moment from 'moment';
-const apiUrl = window.origin;
+const apiUrl = window.location.origin;
 
 export default class Context {
 

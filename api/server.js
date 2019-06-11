@@ -21,14 +21,25 @@ mongoose
 // Use Middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// Allow CORS (cross-origin) requests and non-standard methods (e.g. PUT/DELETE)
-app.use(cors());
-app.options('*', cors());
 app.use((req, res, next) => {
   // This allows us to access user object without having to pass it from frontend
   res.locals.user = req.user;
   next();
 });
+
+// Allow CORS (cross-origin) requests and non-standard methods (e.g. PUT/DELETE)
+const whitelist = ['http://localhost:3000', 'https://bookface-mock.herokuapp.com'];
+const corsOptions = {
+  origin: (origin, next) => {
+    if (whitelist.includes(origin)) {
+      next(null, true);
+    } else {
+      next(new Error('Not Allowed by CORS'));
+    }
+  }
+}
+app.use(cors(corsOptions));
+app.options('*', cors());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(__dirname));
   app.use(express.static(path.resolve(__dirname + '../../client/build')));
