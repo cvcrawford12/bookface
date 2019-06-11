@@ -12,6 +12,11 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(__dirname));
+  app.use(express.static(path.resolve(__dirname + '../../client/build')));
+}
+
 // Require Routes (API endpoints)
 const authRoutes = require('./routes/auth');
 const socialRoutes = require('./routes/social');
@@ -59,13 +64,9 @@ socialRoutes(app);
 apiRoutes(app);
 
 // Pass all routes to index file from webpack build
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(__dirname));
-  app.use(express.static(path.resolve(__dirname + '../../client/build')));
-  app.get('*', (res, res) => {
-    res.sendFile(path.resolve(__dirname + '../../client/build/index.html'));
-  })
-}
+app.get('*', (res, res) => {
+  res.sendFile(path.resolve(__dirname + '../../client/build/index.html'));
+});
 
 app.listen(process.env.PORT || config.port, () => {
   console.log(`Server running on port ${config.port}`);
