@@ -64,7 +64,7 @@ socialRoutes(app);
 apiRoutes(app);
 
 // Pass all routes to index file from webpack build
-app.get('*', (res, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '../../client/build/index.html'));
 });
 
