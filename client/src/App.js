@@ -30,9 +30,11 @@ class App extends Component {
       posts: [],
       loadingPosts: false,
       loadingAuth: false,
-      uploading: false,
+      errorMessage: '',
+      successMessage: ''
     }
   }
+
   componentDidMount() {
     if (store.get('token')) {
       this.loginUser();
@@ -48,9 +50,7 @@ class App extends Component {
     const pathname = window.location.pathname;
     const pushToDash = pathname.includes('/login') || pathname.includes('/register') || pathname === '/';
     const token = store.get('token');
-    if (!token) {
-      this.setState({ loadingAuth: true });
-    }
+    this.setState({ loadingAuth: true });
     Context.loginUser(values)
       .then(json => {
         this.setState({user: json.user, isAuthenticated: true, loadingAuth: false });
@@ -86,17 +86,19 @@ class App extends Component {
   }
 
   editProfile(values) {
-    this.setState({ uploading: true });
+    this.setState({ loading: true });
     Context.editProfile(values)
       .then((json) => {
-        this.setState({ user: json.user, uploading: false });
+        this.setState({ user: json.user, loading: false, successMessage: 'Successfully updated profile' });
         if (history.location.pathname.includes('/register')) {
           history.push('/dashboard');
         }
+        setTimeout(() => this.setState({ successMessage: '' }), 2000);
       })
       .catch((e) => {
-        this.setState({ uploading: false, errorMessage: 'Trouble uploading profile' });
+        this.setState({ loading: false, errorMessage: 'Trouble updating profile' });
         console.error(e);
+        setTimeout(() => this.setState({ errorMessage: '' }), 2000);
       })
   }
 
@@ -122,10 +124,14 @@ class App extends Component {
   }
 
   updateProfileImg(data) {
+    this.setState({ loadingAuth: true });
     Context
       .fetchUploadWrapper('/api/upload/profileImg', { method: 'PUT', body: data })
-      .then((json) => this.setState({ user: json.user }))
-      .catch((e) => console.error(e));
+      .then((json) => this.setState({ user: json.user, loadingAuth: false }))
+      .catch((e) => {
+        this.setState({ loadingAuth: false });
+        console.error(e)
+      });
   }
 
   getProviders() {
@@ -135,7 +141,6 @@ class App extends Component {
         loginUser: this.loginUser,
         registerUser: this.registerUser,
         authError: this.state.authError,
-        uploading: this.state.uploading,
         isAuthenticated: this.state.isAuthenticated,
         loading: this.state.loadingAuth
       },
@@ -145,7 +150,9 @@ class App extends Component {
         editProfile: this.editProfile,
         loading: this.state.loadingPosts,
         addOrDeleteFriend: this.addOrDeleteFriend,
-        updateProfileImg: this.updateProfileImg
+        updateProfileImg: this.updateProfileImg,
+        successMessage: this.state.successMessage,
+        errorMessage: this.state.errorMessage
       },
       clearStore: this.clearStore
     }

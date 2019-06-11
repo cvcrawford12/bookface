@@ -58,7 +58,7 @@ class RegisterDetails extends Component {
               </AvGroup>
               <AvField type="file" id="file" name="file" label="Profile Avatar*" required/>
               {this.props.authError !== '' && <p className="text-danger">{this.props.authError}</p>}
-              {this.props.uploading && <p className="text-success">Uploading...</p>}
+              {this.props.loading && <p className="text-success">Uploading...</p>}
               <FormGroup>
                 <Button className="primary-bg">Submit</Button>
               </FormGroup>
@@ -79,7 +79,7 @@ export default props => (
     {context =>
       <RegisterDetails
         {...props}
-        uploading={context.auth.uploading}
+        loading={context.auth.loading}
         authError={context.auth.authError}
         editProfile={context.social.editProfile}
         user={context.auth.user}

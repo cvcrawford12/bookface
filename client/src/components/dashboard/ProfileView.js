@@ -48,7 +48,11 @@ class ProfileView extends Component {
   }
 
   backToDash() {
-    this.setState({ showFriendsTab: false, showPhotos: false });
+    if (this.props.history.location.pathname.includes('edit')) {
+      this.props.history.push('/dashboard');
+    } else {
+      this.setState({ showFriendsTab: false, showPhotos: false });
+    }
   }
 
   uploadFile(e) {
@@ -60,11 +64,11 @@ class ProfileView extends Component {
 
   render() {
     const user = !Object.keys(this.state.user).length ? this.props.user : this.state.user;
-    const location = this.props.history.location.pathname;
+    const location = this.props.history.location.pathname
     return (
       <React.Fragment>
         <Row className="profile-row d-flex flex-wrap">
-          <Loader loading={this.props.loading}>
+          <Loader loading={this.props.loadingAuth}>
             <Col md="12" className="profile-col">
               <Card className="profile-card">
                 <CardImg src={Photo} className="img-fluid profile-backdrop"/>
@@ -87,10 +91,10 @@ class ProfileView extends Component {
         </Row>
         <Row className="profile-row">
           {!location.includes('edit') && !this.state.showFriendsTab && !this.state.showPhotos &&
-            <AboutSection user={user} loading={this.props.loading} posts={this.props.posts}/>
+            <AboutSection user={user} loading={this.props.loadingAuth} posts={this.props.posts}/>
           }
           {location.includes('edit') && !this.state.showFriendsTab && !this.state.showPhotos &&
-            <EditAboutSection user={this.props.user}/>
+            <EditAboutSection user={this.props.user} loading={this.props.loadingAuth}/>
           }
           {this.state.showFriendsTab &&
             <Col md="12" className="profile-col">
@@ -128,9 +132,10 @@ export default props => (
       <ProfileView
         {...props}
         addOrDeleteFriend={context.social.addOrDeleteFriend}
-        loading={context.social.loading || context.auth.loading}
+        loadingPosts={context.social.loading}
         user={context.auth.user}
         updateProfileImg={context.social.updateProfileImg}
+        loadingAuth={context.auth.loading}
       />
     }
   </AppContext.Consumer>

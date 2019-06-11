@@ -19,17 +19,12 @@ class NewPost extends Component {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
-  handleValidPost(event, values) {
-    let data;
-    if (values.file) {
-      const file = document.getElementById('file').files[0];
-      data = new FormData();
-      Object.keys(values).map(key => {
-        data.append(key, key !== 'file' ? values[key] : file);
-      })
-    } else {
-      data = JSON.stringify(values);
-    }
+  postWithPhoto(values) {
+    const file = document.getElementById('file').files[0];
+    const data = new FormData();
+    Object.keys(values).map(key => {
+      data.append(key, key !== 'file' ? values[key] : file);
+    });
     Context.fetchUploadWrapper('/social/create/post', {
       method: 'POST',
       body: data
@@ -45,6 +40,28 @@ class NewPost extends Component {
         this.setState({ successMessage: '', errorMessage: '', isOpen: false });
       }, 2000)
     })
+  }
+
+  handleValidPost(event, values) {
+    if (values.file) {
+      this.postWithPhoto(values);
+    } else {
+      Context.fetchWrapper('/social/create/post', {
+        method: 'POST',
+        body: JSON.stringify(values)
+      }).then(() => {
+        this.setState({ successMessage: 'Successfully posted!'});
+        this.props.fetchPosts();
+        setTimeout(() => {
+          this.setState({ successMessage: '', errorMessage: '', isOpen: false });
+        }, 2000);
+      }).catch(e => {
+        this.setState({ errorMessage: e.message });
+        setTimeout(() => {
+          this.setState({ successMessage: '', errorMessage: '', isOpen: false });
+        }, 2000)
+      })
+    }
   }
 
   updateFileText(e) {

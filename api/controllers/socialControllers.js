@@ -115,6 +115,7 @@ exports.getAllPosts = (req, res) => {
 }
 
 exports.createNewPost = (req, res) => {
+  console.log(req.body);
   if (!req.body.postText) {
     return res.status(400).json({message: 'Please provide some text for the post'});
   }
