@@ -24,11 +24,11 @@ mongoose
   .catch((e) => console.log(e));
 
 // Use Middlewares
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 // Allow CORS (cross-origin) requests and non-standard methods (e.g. PUT/DELETE)
-app.use(cors())
-app.options('*', cors())
+app.use(cors());
+app.options('*', cors());
 app.use((req, res, next) => {
   // This allows us to access user object without having to pass it from frontend
   res.locals.user = req.user;
