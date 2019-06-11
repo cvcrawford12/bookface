@@ -12,11 +12,6 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(__dirname));
-  app.use(express.static(path.resolve(__dirname + '../../client/build')));
-}
-
 // Require Routes (API endpoints)
 const authRoutes = require('./routes/auth');
 const socialRoutes = require('./routes/social');
@@ -39,6 +34,10 @@ app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(__dirname));
+  app.use(express.static(path.resolve(__dirname + '../../client/build')));
+}
 
 // Use JWT Authentication
 app.use((req, res, next) => {
@@ -68,6 +67,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '../../client/build/index.html'));
 });
 
-app.listen(process.env.PORT || config.port, () => {
+app.listen(process.env.PORT || config.port, process.env.IP, () => {
   console.log(`Server running on port ${config.port}`);
 });
