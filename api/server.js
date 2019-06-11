@@ -28,7 +28,10 @@ app.use((req, res, next) => {
 });
 
 // Allow CORS (cross-origin) requests and non-standard methods (e.g. PUT/DELETE)
-app.use(cors());
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://bookface-mock.herokuapp.com', 'http://localhost:8080']
+};
+app.use(cors(corsOptions));
 app.options('*', cors());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(__dirname));
@@ -38,7 +41,7 @@ if (process.env.NODE_ENV === 'production') {
 // Use JWT Authentication
 app.use((req, res, next) => {
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-    jwt.verify(req.headers.authorization.split(' ')[1], process.env.JWT_KEY, (err, decoded) => {
+    jwt.verify(req.headers.authorization.split(' ')[1], config.key, (err, decoded) => {
       if (err) {
         req.user = undefined;
         next();
@@ -64,8 +67,12 @@ socialRoutes(app);
 apiRoutes(app);
 
 // Pass all routes to index file from webpack build
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '../../client/build/index.html'));
+app.get('*', (req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    res.sendFile(path.resolve(__dirname + '../../client/build/index.html'));
+  } else {
+    next();
+  }
 });
 
 app.listen(process.env.PORT || config.port, () => {

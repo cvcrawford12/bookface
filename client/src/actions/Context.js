@@ -1,6 +1,6 @@
 import store from 'store-js';
 import moment from 'moment';
-const apiUrl = window.location.origin;
+const apiUrl = window.location.origin.includes('localhost') ? 'http://localhost:8080' : window.location.origin;
 
 export default class Context {
 
