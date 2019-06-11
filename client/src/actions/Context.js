@@ -10,7 +10,7 @@ export default class Context {
       determines if reponse was succesful or API threw and error
     */
     const headers = {'Content-Type': 'application/json', 'authorization': `JWT ${store.get('token')}`};
-    return fetch(`${apiUrl}/${url}`, {
+    return fetch(`${apiUrl}${url}`, {
       headers,
       mode: 'cors',
       ...params
