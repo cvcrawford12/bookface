@@ -28,7 +28,9 @@ class App extends Component {
       authError: '',
       isAuthenticated: false,
       posts: [],
-      loadingPosts: false
+      loadingPosts: false,
+      loadingAuth: false,
+      uploading: false,
     }
   }
   componentDidMount() {
@@ -45,11 +47,15 @@ class App extends Component {
   loginUser(values = null) {
     const pathname = window.location.pathname;
     const pushToDash = pathname.includes('/login') || pathname.includes('/register') || pathname === '/';
+    const token = store.get('token');
+    if (!token) {
+      this.setState({ loadingAuth: true });
+    }
     Context.loginUser(values)
       .then(json => {
-        this.setState({user: json.user, isAuthenticated: true });
+        this.setState({user: json.user, isAuthenticated: true, loadingAuth: false });
         // Only set token if we don't already have one
-        if (!store.get('token')){
+        if (!token){
           store.set('token', json.token);
         }
         if (pushToDash) {
@@ -57,7 +63,7 @@ class App extends Component {
         }
       })
       .catch(e => {
-        this.setState({ authError: e.message });
+        this.setState({ authError: e.message, loadingAuth: false });
         store.clearAll();
         console.error(e);
         setTimeout(() => this.setState({ authError: ''}), 2000);
@@ -72,7 +78,7 @@ class App extends Component {
         history.push('/register/details');
       })
       .catch((e) => {
-        this.setState({ authError: e.message });
+        this.setState({ authError: e.message});
         store.clearAll();
         console.error(e);
         setTimeout(() => this.setState({ authError: ''}), 2000);
@@ -80,15 +86,16 @@ class App extends Component {
   }
 
   editProfile(values) {
+    this.setState({ uploading: true });
     Context.editProfile(values)
       .then((json) => {
-        this.setState({ user: json.user });
-        console.log(history, history.location);
+        this.setState({ user: json.user, uploading: false });
         if (history.location.pathname.includes('/register')) {
           history.push('/dashboard');
         }
       })
       .catch((e) => {
+        this.setState({ uploading: false, errorMessage: 'Trouble uploading profile' });
         console.error(e);
       })
   }
@@ -114,20 +121,31 @@ class App extends Component {
     }).catch((e) => console.error(e));
   }
 
-  providers() {
+  updateProfileImg(data) {
+    Context
+      .fetchUploadWrapper('/api/upload/profileImg', { method: 'PUT', body: data })
+      .then((json) => this.setState({ user: json.user }))
+      .catch((e) => console.error(e));
+  }
+
+  getProviders() {
     return {
       auth: {
         user: this.state.user,
         loginUser: this.loginUser,
         registerUser: this.registerUser,
-        authError: this.state.authError
+        authError: this.state.authError,
+        uploading: this.state.uploading,
+        isAuthenticated: this.state.isAuthenticated,
+        loading: this.state.loadingAuth
       },
       social: {
         posts: this.state.posts,
         fetchPosts: this.fetchPosts,
         editProfile: this.editProfile,
         loading: this.state.loadingPosts,
-        addOrDeleteFriend: this.addOrDeleteFriend
+        addOrDeleteFriend: this.addOrDeleteFriend,
+        updateProfileImg: this.updateProfileImg
       },
       clearStore: this.clearStore
     }
@@ -136,9 +154,9 @@ class App extends Component {
 
   render() {
     return (
-      <AppContext.Provider value={this.providers()}>
+      <AppContext.Provider value={this.getProviders()}>
         <Router history={history}>
-          <Header clearStore={this.clearStore} history={history} isAuthenticated={this.state.isAuthenticated}/>
+          <Header history={history} />
           <div className="wrapper">
             <Route exact path="/" component={Landing}/>
             <Switch>
@@ -146,7 +164,7 @@ class App extends Component {
               <Route exact path="/register" component={RegisterForm}/>
               <Route exact path="/register/details" component={RegisterDetails}/>
               <Route exact path="/dashboard" component={DashboardContainer}/>
-              <Route exact path="/dashboard/profile/edit" component={DashboardContainer}/>
+              <Route exact path="/dashboard/edit" component={DashboardContainer}/>
               <Route exact path="/users" component={FriendsList} />
               <Route path="/profile/:id" component={ProfileContainer}/>
             </Switch>

@@ -1,40 +1,9 @@
+/* Profile Markup */
 .profile-backdrop {
   max-height: 10rem;
   object-fit: cover;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
-}
-
-.triangle-hr {
-  border-top: 1px solid dodgerblue;
-  position:relative;
-  margin-top: 1rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-}
-
-.triangle-hr:after{
-  content: '';
-  position:absolute;
-  left: calc(50% - 10px);
-  top: -10px;
-  width: 10px;
-  height: 0;
-  border-style: solid;
-  border-width: 0 10px 10px 10px;
-  border-color: transparent transparent dodgerblue transparent;
-}
-.triangle-hr:before{
-  content: '';
-  position:absolute;
-  left: calc(50% - 10px);
-  top: -9px;
-  width: 10px;
-  height: 0;
-  border-style: solid;
-  border-width: 0 10px 10px 10px;
-  border-color: transparent transparent #fff transparent;
-  z-index: 10;
 }
 
 .profile-card, .friend-card {
@@ -58,59 +27,10 @@
   margin: 0 0.5rem;
 }
 
-.about-list li:first-child,
-.favorites-list li:first-child {
-  border-top: none !important;
-}
-
-.about-list li {
-  font-size: 0.8rem;
-}
-
-.about-list > li,
-.favorites-list > li {
-  padding: 0.5rem 0.75rem;
-  text-transform: capitalize;
-}
-
-.hobby-list li {
-  padding: 0.2rem 0;
-}
-
-.button-group {
-  width: 90%;
-}
-
-.button-group button {
-  padding: 0.4rem 0.8rem;
-  background: none;
-  outline: none;
-  color: #3b5998;
-  border: none;
-  border-left: 1px solid rgba(150, 150, 150, 0.7);;
-}
-
-.button-group:last-child {
-  border-right: 1px solid rgba(150, 150, 150, 0.7);
-}
-
-.post-btn {
-  margin-bottom: 0.5rem;
-  background: #3b5998;
-}
-
-.post-btn .fas.fa-plus {
-  color: #fff;
-}
-
 .profile-img, .profile-img-top, .comment-img {
   max-width: 15%;
   border-radius: 50%;
   margin-right: 0.5rem;
-}
-
-.comment-img {
-  max-width: 10%;
 }
 
 .profile-img-top {
@@ -125,20 +45,30 @@
   border: 1px solid #333;
 }
 
-.hobby-text {
-  padding: 0 0.5rem;
-  margin-bottom: 0.1rem;
-  text-transform: capitalize;
+.comment-img {
+  max-width: 10%;
 }
 
-.hobby-header {
-  width: 100%;
+/* Post Markup */
+.post-btn {
+  margin-bottom: 0.5rem;
+  background: #3b5998;
+}
+
+.post-btn .fas.fa-plus {
+  color: #fff;
 }
 
 .post-author,
 .post-author a,
 .post-author:hover {
   color: var(--primary-color);
+}
+
+.post-image {
+  max-width: 100%;
+  height: auto;
+  padding: 0.5rem 0;
 }
 
 /* Comment Bubble Markup */
@@ -162,8 +92,6 @@
   overflow-y: scroll;
 }
 
-
-/** ios1-ios6 bubbles **/
 .bubble {
   display: inline-block;
   box-sizing: border-box;
@@ -212,7 +140,8 @@
 }
 
 
-.comment-input input {
+.comment-input input,
+.comment-input {
   border-radius: 5rem;
 }
 
@@ -241,6 +170,59 @@
   border-top-right-radius: 5rem;
   border-bottom-right-radius: 5rem;
 }
+
+/* Profile Info Markup */
+.about-list li:first-child,
+.favorites-list li:first-child {
+  border-top: none !important;
+}
+
+.about-list li,
+.favorites-list li {
+  padding: 0.5rem 0.75rem;
+  text-transform: capitalize;
+  font-size: 0.8rem;
+}
+
+.hobby-list li {
+  padding: 0.2rem 0;
+}
+
+.hobby-text {
+  padding: 0 0.5rem;
+  margin-bottom: 0.1rem;
+  text-transform: capitalize;
+  font-size: 0.8rem;
+}
+
+.hobby-header {
+  width: 100%;
+}
+
+/* Profile Header Markup */
+.button-group {
+  width: 90%;
+}
+
+.button-group button,
+.button-group label {
+  padding: 0.4rem 0.8rem;
+  background: none;
+  outline: none;
+  color: #3b5998;
+  border: none;
+  border-left: 1px solid rgba(150, 150, 150, 0.7);
+  margin: 0;
+}
+
+.button-group:last-child {
+  border-right: 1px solid rgba(150, 150, 150, 0.7);
+}
+
+#avatarUpload {
+  display: none;
+}
+
 
 @media (max-width: 648px) {
   .profile-img-top {

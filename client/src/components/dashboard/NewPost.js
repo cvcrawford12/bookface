@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import { Modal, Button, ModalBody, FormGroup } from 'reactstrap';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
@@ -21,9 +20,19 @@ class NewPost extends Component {
   }
 
   handleValidPost(event, values) {
-    Context.fetchWrapper('/social/create/post', {
+    let data;
+    if (values.file) {
+      const file = document.getElementById('file').files[0];
+      data = new FormData();
+      Object.keys(values).map(key => {
+        data.append(key, key !== 'file' ? values[key] : file);
+      })
+    } else {
+      data = JSON.stringify(values);
+    }
+    Context.fetchUploadWrapper('/social/create/post', {
       method: 'POST',
-      body: JSON.stringify(values)
+      body: data
     }).then(() => {
       this.setState({ successMessage: 'Successfully posted!'});
       this.props.fetchPosts();
@@ -45,7 +54,15 @@ class NewPost extends Component {
         <Modal isOpen={this.state.isOpen} toggle={this.toggle}>
           <ModalBody>
             <AvForm onValidSubmit={this.handleValidPost}>
-              <AvField type="textarea" name="postText" id="postText" label="Post Text"/>
+              <AvField type="textarea" name="postText" id="postText" label="Post Text*" required/>
+              <InputGroup> className="mb-2 shadow comment-input">
+                <Label>Photo</Label>
+                <Input type="file" name="file" id="file"/>
+                <InputGroupAddon addOnType="append">
+                  <Button></Button>
+                </InputGroupAddon>
+              </InputGroup>
+              <AvField type="file" name="file" id="file" label="Post Image"/>
               {this.state.errorMessage !== '' &&
                 <p className="text-danger">{this.state.errorMessage}</p>
               }
@@ -65,6 +82,6 @@ class NewPost extends Component {
 
 export default props => (
   <AppContext.Consumer>
-    {context => <NewPost {...props} fetchPosts={context.fetchPosts} />}
+    {context => <NewPost {...props} fetchPosts={context.social.fetchPosts} />}
   </AppContext.Consumer>
 )

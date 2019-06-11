@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardImg, CardBody, CardHeader, ListGroupItem, Button } from 'reactstrap';
+import { ListGroupItem, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Context from '../../actions/Context';
 import Img from '../../assets/images/profile.jpeg';
@@ -11,7 +11,7 @@ export default ({user, addOrDeleteFriend, isFriendsTab}) => {
   }
   return (
     <ListGroupItem className="friend-card">
-      <img src={Img}/>
+      <img src={user.avatar ? user.avatar :Img} alt="Profile"/>
       <div>
         <strong className="friend-title"><Link to={"/profile/" + user._id}>{Context.fullName(user)}</Link></strong>
         {addOrDeleteBtn}

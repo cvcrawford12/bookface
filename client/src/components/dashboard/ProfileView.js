@@ -8,6 +8,7 @@ import AboutSection from './AboutSection';
 import EditAboutSection from './EditAboutSection';
 import Context from '../../actions/Context';
 import ProfileCard from '../friends/ProfileCard';
+import Loader from '../loaders/Loader';
 
 class ProfileView extends Component {
   constructor(props) {
@@ -33,14 +34,23 @@ class ProfileView extends Component {
   }
 
   toggleEdit() {
-    const url = window.location.pathname.includes('edit') ? '/dashboard' : '/dashboard/profile/edit';
+    const url = window.location.pathname.includes('edit') ? '/dashboard' : '/dashboard/edit';
     this.props.history.push(url);
   }
 
-  toggleFriendsTab() {
-    if (!this.props.history.location.pathname.includes('edit')) {
-      this.setState({ showFriendsTab: !this.state.showFriendsTab });
-    }
+  showFriendsTab() {
+    this.setState({ showFriendsTab: true });
+  }
+
+  closeFriendsTab() {
+    this.setState({ showFriendsTab: false });
+  }
+
+  uploadFile(e) {
+    const file = e.currentTarget.files[0];
+    const data = new FormData();
+    data.append('file', file);
+    this.props.updateProfileImg(data);
   }
 
   render() {
@@ -49,18 +59,26 @@ class ProfileView extends Component {
     return (
       <React.Fragment>
         <Row className="profile-row d-flex flex-wrap">
-          <Col md="12" className="profile-col">
-            <Card className="profile-card">
-              <CardImg src={Photo} className="img-fluid profile-backdrop"/>
-              <img className="profile-img-top" alt={"Profile Image"} src={Profile} />
-              <div className="d-inline-flex flex-row-reverse button-group">
-                <button onClick={this.toggleFriendsTab}>Friends</button>
-                <button>Photos</button>
-                {!location.includes('/profile') && <button onClick={this.toggleEdit}>{location.includes('edit') ? 'Dashboard' : 'Edit'}</button>}
-                <a onClick={this.toggleFriendsTab} className="pr-4 align-self-center m-0 clickable">{Context.fullName(user)}</a>
-              </div>
-            </Card>
-          </Col>
+          <Loader loading={this.props.loading}>
+            <Col md="12" className="profile-col">
+              <Card className="profile-card">
+                <CardImg src={Photo} className="img-fluid profile-backdrop"/>
+                <img className="profile-img-top" alt="Profile" src={user.avatar && user.avatar !== '' ? user.avatar : Profile} />
+                <div className="d-inline-flex flex-row-reverse button-group">
+                  <button onClick={this.showFriendsTab}>Friends</button>
+                  <button>Photos</button>
+                  {!location.includes('/profile') && <button onClick={this.toggleEdit}>{location.includes('edit') ? 'Dashboard' : 'Edit'}</button>}
+                  <button onClick={this.closeFriendsTab}>{Context.fullName(user)}</button>
+                  {location.includes('edit') &&
+                    <React.Fragment>
+                      <label htmlFor="avatarUpload" className="clickable"><i className="fas fa-camera"></i> Edit</label>
+                      <input id="avatarUpload" type="file" name="avatar" onChange={this.uploadFile} />
+                    </React.Fragment>
+                  }
+                </div>
+              </Card>
+            </Col>
+          </Loader>
         </Row>
         <Row className="profile-row">
           {!location.includes('edit') && !this.state.showFriendsTab &&
@@ -73,7 +91,6 @@ class ProfileView extends Component {
             <Col md="12" className="profile-col">
               <h5>Friends</h5>
               {user.friends.length ? user.friends.map((friend, index) => {
-                console.log(friend);
                 return (
                   <ProfileCard key={index} addOrDeleteFriend={this.props.addOrDeleteFriend} isFriendsTab={true} user={friend} />
                 )
@@ -92,6 +109,14 @@ class ProfileView extends Component {
 
 export default props => (
   <AppContext.Consumer>
-    {context => <ProfileView {...props} addOrDeleteFriend={context.social.addOrDeleteFriend} loading={context.social.loading} user={context.auth.user}/>}
+    {context =>
+      <ProfileView
+        {...props}
+        addOrDeleteFriend={context.social.addOrDeleteFriend}
+        loading={context.social.loading || context.auth.loading}
+        user={context.auth.user}
+        updateProfileImg={context.social.updateProfileImg}
+      />
+    }
   </AppContext.Consumer>
 );

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
-import { InputGroup, CardDeck, Input, InputGroupAddon, Button, Row, Col, Nav, NavItem, NavLink, ListGroup } from 'reactstrap';
+import { InputGroup, Input, InputGroupAddon, Button, Row, Col, Nav, NavItem, NavLink, ListGroup } from 'reactstrap';
 import FriendsContainer from '../../containers/FriendsContainer';
 import ProfileCard from './ProfileCard';
 import Context from '../../actions/Context';

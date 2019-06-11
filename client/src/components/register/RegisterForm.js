@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import autoBind from 'react-autobind';
 import store from 'store-js';
 import { Link } from 'react-router-dom';
 import { Row, Col, Card, CardBody, FormGroup, Button } from 'reactstrap';

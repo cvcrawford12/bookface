@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import store from 'store-js';
 import autoBind from 'react-autobind';
 import { Link } from 'react-router-dom';
-import Logo from '../../logo.svg';
-import {
-  Navbar, Container, NavbarBrand, NavbarToggler, Collapse, Nav, Dropdown,
-  DropdownToggle, DropdownItem, DropdownMenu, NavItem, NavLink
-} from 'reactstrap';
+import { Navbar, Container, NavbarBrand, NavbarToggler, Collapse, Nav, NavItem, NavLink } from 'reactstrap';
+import { AppContext } from '../../App';
 
 class Header extends Component {
   constructor(props) {
@@ -45,12 +41,11 @@ class Header extends Component {
                     <NavItem onClick={this.logout} className="clickable ml-2 align-self-center">Log Out</NavItem>
                   </React.Fragment>
                 }
-                {!this.props.isAuthenticated &&
-                  <NavItem>
-                    <NavLink tag={Link} to={pathname.includes('/login') ? '/register' : '/login'}>
-                      {pathname.includes('/login') ? 'Register' : 'Log In'}
-                    </NavLink>
-                  </NavItem>
+                {!this.props.isAuthenticated && pathname === '/' &&
+                  <React.Fragment>
+                    <NavItem><NavLink tag={Link} to="/login">Log In</NavLink></NavItem>
+                    <NavItem><NavLink tag={Link} to="/register">Register</NavLink></NavItem>
+                  </React.Fragment>
                 }
               </Nav>
             </Collapse>
@@ -67,4 +62,8 @@ Header.propTypes = {
   history: PropTypes.object.isRequired
 }
 
-export default Header;
+export default props => (
+  <AppContext.Consumer>
+    {context => <Header {...props} isAuthenticated={context.auth.isAuthenticated} clearStore={context.clearStore}/>}
+  </AppContext.Consumer>
+);

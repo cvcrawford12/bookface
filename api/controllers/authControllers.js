@@ -38,6 +38,9 @@ exports.login = (req, res) => {
     if (error) {
       return res.status(401).json({ error, message: 'Could not find user' });
     }
+    if (!user) {
+      return res.status(401).json({ error, message: 'Authentication failed, incorrect password or username' });
+    }
     if (!user.comparePassword(req.body.password, user.password)) {
       return res.status(401).json({ message: 'Authentication failed, incorrect password for username'})
     }
@@ -50,7 +53,7 @@ exports.getProfile = (req, res) => {
     .findOne({ _id: req.user._id })
     .populate({
       path: 'friends',
-      select: 'firstName lastName'
+      select: 'firstName lastName avatar'
     })
     .exec((error, user) => {
       if (error) {

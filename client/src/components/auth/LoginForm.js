@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import autoBind from 'react-autobind';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, FormGroup, Button } from 'reactstrap';
 import { AvField, AvForm } from 'availity-reactstrap-validation';

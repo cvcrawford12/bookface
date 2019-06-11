@@ -75,10 +75,10 @@ class ExpandedPost extends Component {
         <Media key={index}>
           <Media body>
             <div className="d-inline">
-              <img src={Img} className="comment-img"/>
+              <img src={comment.author.avatar ? comment.author.avatar : Img} alt="Profile" className="comment-img"/>
               <div className="d-inline-flex flex-column">
                 <strong className="post-author"><Link to={"/profile/" + comment.author._id}>{Context.fullName(comment.author)}</Link></strong>
-                <small><p className="text-muted">{Context.formatDateTime(post.createdAt)}</p></small>
+                <small><p className="text-muted mb-1">{Context.formatDateTime(post.createdAt)}</p></small>
               </div>
               <div className="bubble shadow-sm d-flex flex-column">
                 <p className="comment-text">{comment.commentText}</p>
@@ -92,7 +92,7 @@ class ExpandedPost extends Component {
       <Modal isOpen={isOpen} toggle={toggle}>
         <ModalHeader toggle={toggle}>
           <div className="d-inline">
-            <img src={Img} className="img-circle profile-img"/>
+            <img src={post.author.avatar ? post.author.avatar : Img} alt="" className="img-circle profile-img"/>
             <div className="d-inline-flex flex-column">
               <strong className="post-author"><Link to={"/profile/" + post.author._id}>{Context.fullName(post.author)}</Link></strong>
               <small><p className="text-muted">{Context.formatDateTime(post.createdAt)}</p></small>
@@ -101,6 +101,7 @@ class ExpandedPost extends Component {
         </ModalHeader>
         <ModalBody>
           <div className="d-flex flex-column px-4">
+            {post.image && <img className="post-image" src={post.image}/>}
             <p>{post.postText}</p>
             <div className="d-inline-flex emojis flex-row">
               <i className="fas fa-smile-beam"></i>
@@ -142,7 +143,7 @@ class ExpandedPost extends Component {
 
 ExpandedPost.propTypes = {
   post: PropTypes.object.isRequired,
-  userId: PropTypes.string.isRequired
+  userId: PropTypes.string
 };
 
 export default ExpandedPost;

@@ -5,7 +5,6 @@ import store from 'store-js';
 import ProfileView from '../components/dashboard/ProfileView';
 import PostView from '../components/dashboard/PostView';
 import { AppContext } from '../App';
-import Context from '../actions/Context';
 
 class DashboardContainer extends Component {
   constructor(props) {

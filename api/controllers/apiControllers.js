@@ -46,3 +46,20 @@ exports.searchFriends = (req, res) => {
       return res.status(200).json({users});
     })
 }
+
+exports.uploadProfileImg = (req, res) => {
+  if (!req.file.location) {
+    return res.status(400).json({message: 'Failed to upload'});
+  }
+  User.findOneAndUpdate(
+    { _id: req.user._id},
+    {avatar: req.file.location},
+    {new: true},
+    (error, user) => {
+      if (error) {
+        return res.status(400).json({error, message: 'Unable to update user'});
+      }
+      return res.status(200).json({user});
+    }
+  )
+}

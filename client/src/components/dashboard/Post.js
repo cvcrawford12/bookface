@@ -5,7 +5,6 @@ import { Card, CardBody, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Img from '../../assets/images/profile.jpeg';
 import Context from '../../actions/Context';
-import { AppContext } from '../../App';
 import ExpandedPost from './ExpandedPost';
 
 class Post extends Component {
@@ -28,12 +27,15 @@ class Post extends Component {
         <Card className="profile-card">
           <CardBody>
             <div className="d-inline">
-              <img src={Img} className="img-circle profile-img"/>
+              <img src={post.author.avatar ? post.author.avatar : Img} alt="Profile" className="img-circle profile-img"/>
               <div className="d-inline-flex flex-column">
                 <strong className="post-author"><Link to={"/profile/" + post.author._id}>{Context.fullName(post.author)}</Link></strong>
                 <small><p className="text-muted">{Context.formatDateTime(post.createdAt)}</p></small>
               </div>
             </div>
+            {post.image && post.image !== '' &&
+              <img src={post.image} className="post-image" />
+            }
             <p>{post.postText}</p>
             <Button onClick={this.toggle} className="primary-bg" block>View Post</Button>
           </CardBody>
@@ -46,7 +48,7 @@ class Post extends Component {
 
 Post.propTypes = {
   post: PropTypes.object.isRequired,
-  userId: PropTypes.string.isRequired
+  userId: PropTypes.string
 };
 
 export default Post;

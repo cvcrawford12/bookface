@@ -1,5 +1,6 @@
 const loginRequired = require('../controllers/authControllers').loginRequired;
 const socialControllers = require('../controllers/socialControllers');
+const upload = require('../middleware/fileUpload');
 
 /*
   Routes: getProfileById, getAllUsers, postNewPost, getAllPosts
@@ -24,10 +25,10 @@ module.exports = (app) => {
     .put(loginRequired, socialControllers.deleteFriend);
 
   app.route('/profile/edit')
-    .put(loginRequired, socialControllers.editProfile);
+    .put(loginRequired, upload.upload.single('file'), socialControllers.editProfile);
 
   app.route('/social/create/post')
-    .post(loginRequired, socialControllers.createNewPost);
+    .post(loginRequired, upload.upload.single('file'), socialControllers.createNewPost);
 
   app.route('/social/create/comment')
     .put(loginRequired, socialControllers.createNewComment);

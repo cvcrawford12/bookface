@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Container, Card, CardBody, Row, Col } from 'reactstrap';
-import { Facebook } from 'react-content-loader';
 import SearchLoader from './SearchLoader';
 
 class Loader extends Component {
@@ -42,12 +41,14 @@ class Loader extends Component {
           )
         } else {
           return (
-            <Container><Card><CardBody><SearchLoader /></CardBody></Card></Container>
+            <Container className="pb-2"><Card><CardBody><SearchLoader /></CardBody></Card></Container>
           )
         }
     } else {
       return (
-        this.props.children
+        <React.Fragment>
+          {this.props.children ? this.props.children : null}
+        </React.Fragment>
       )
     }
   }

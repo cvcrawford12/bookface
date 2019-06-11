@@ -3,7 +3,8 @@ const User = require('../models/User'),
       Comment = require('../models/Comment');
 
 exports.getAllUsers = (req, res) => {
-  User.find({})
+  User
+    .find({})
     .sort('lastName')
     .exec((error, users) => {
       if (error) {
@@ -32,7 +33,7 @@ exports.getProfileById = (req, res) => {
   User.findOne({ _id: req.params.id })
     .populate({
       path: 'friends',
-      select: 'firstName lastName'
+      select: 'firstName lastName avatar'
     })
     .exec((error, user) => {
       if (error) {
@@ -83,7 +84,14 @@ exports.deleteFriend = (req, res) => {
 }
 
 exports.editProfile = (req, res) => {
-  User.findOneAndUpdate({ _id: req.user._id }, req.body, { new: true }, (error, user) => {
+  let data = { ...req.body };
+  if (req.file) {
+    data.avatar = req.file.location;
+    data.info = JSON.parse(data.info);
+    data.favorites = JSON.parse(data.favorites);
+    data.hobbies = JSON.parse(data.hobbies);
+  }
+  User.findOneAndUpdate({ _id: req.user._id }, data, { new: true }, (error, user) => {
     if (error) {
       return res.status(400).json({ error, message: 'Trouble updating user'});
     }
@@ -96,7 +104,7 @@ exports.getAllPosts = (req, res) => {
     .sort({createdAt: -1})
     .populate({
       path: 'author',
-      select: 'firstName lastName'
+      select: 'firstName lastName avatar'
     })
     .exec((error, posts) => {
       if (error) {
@@ -110,7 +118,10 @@ exports.createNewPost = (req, res) => {
   if (!req.body.postText) {
     return res.status(400).json({message: 'Please provide some text for the post'});
   }
-  const newPost = new Post({ author: req.user._id, postText: req.body.postText });
+  let newPost = new Post({ author: req.user._id, postText: req.body.postText });
+  if (req.file) {
+    newPost['image'] = req.file.location;
+  }
   newPost.save((error, post) => {
     if (error) {
       return res.status(400).json({error, message: 'Trouble saving new post'});
@@ -153,7 +164,7 @@ exports.getCommentsForPost = (req, res) => {
       select: 'commentText',
       populate: {
         path: 'author',
-        select: 'firstName lastName',
+        select: 'firstName lastName avatar',
         model: 'users'
       }
     })

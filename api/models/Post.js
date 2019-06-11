@@ -11,6 +11,7 @@ const PostSchema = new Schema({
     required: true,
     maxlength: 3000
   },
+  image: String,
   comments: [{ type: Schema.Types.ObjectId, ref: 'comments'}],
   usersLiked: [{ type: Schema.Types.ObjectId, ref: 'users'}]
 },

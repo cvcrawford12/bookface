@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import autoBind from 'react-autobind';
 import { Col } from 'reactstrap';
 import NewPost from './NewPost';
 import SocialFeed from './SocialFeed';
-import Context from '../../actions/Context';
 import { AppContext } from '../../App';
 
 class PostView extends Component {
-  constructor(props) {
-    super(props);
-    autoBind(this);
-    this.state = {
-      isOpen: false
-    }
-  }
-
   render() {
     return (
       <Col md="4" className="overflow-scroll">

@@ -19,8 +19,8 @@ mongoose
   .catch((e) => console.log(e));
 
 // Use Middlewares
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 // Allow CORS (cross-origin) requests and non-standard methods (e.g. PUT/DELETE)
 app.use(cors())
 app.options('*', cors())

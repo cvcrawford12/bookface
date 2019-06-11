@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import autoBind from 'react-autobind';
-import { Button, Card, CardBody, Col, ListGroup, ListGroupItem, Input, Collapse, Label, InputGroup } from 'reactstrap';
+import { Button, Card, CardBody, Col, ListGroup, Input, Collapse, Label } from 'reactstrap';
 import { AppContext } from '../../App';
 
 class EditAboutSection extends Component {
@@ -22,7 +22,6 @@ class EditAboutSection extends Component {
 
   componentDidUpdate(prevProps) {
     if (Object.keys(prevProps.user).length !== Object.keys(this.props.user).length) {
-      console.log(this.props.user);
       this.setState({ userInfo: this.props.user });
     }
   }
@@ -58,7 +57,6 @@ class EditAboutSection extends Component {
   updateAboutInfo(e) {
     let userInfo = { ...this.state.userInfo };
     let aboutInfo = { ...userInfo.info };
-    console.log(this.state.userInfo);
     aboutInfo[e.currentTarget.id] = e.currentTarget.value;
     userInfo.info = aboutInfo;
     this.setState({ userInfo });
@@ -80,39 +78,25 @@ class EditAboutSection extends Component {
           <Card className="profile-card">
             <CardBody>
               <h5>Intro</h5>
-              <React.Fragment>
-                <Label>Education</Label>
-                <Input type="text" id="education" defaultValue={user.info && user.info.education ? user.info.education : ''} onBlur={this.updateAboutInfo}/>
-              </React.Fragment>
-              <React.Fragment>
-                <Label>Profession</Label>
-                <Input type="text" id="job" defaultValue={user.info && user.info.job ? user.info.job : ''} onBlur={this.updateAboutInfo}/>
-              </React.Fragment>
-              <React.Fragment>
-                <Label>Residence</Label>
-                <Input type="text" id="location" defaultValue={user.info && user.info.location ? user.info.location : ''} onBlur={this.updateAboutInfo}/>
-              </React.Fragment>
-              <React.Fragment>
-                <Label>Birthday</Label>
-                <Input type="text" id="birthday" defaultValue={user.info && user.info.birthday ? user.info.birthday : ''} onBlur={this.updateAboutInfo}/>
-              </React.Fragment>
+              <Label>Education</Label>
+              <Input type="text" id="education" defaultValue={user.info && user.info.education ? user.info.education : ''} onBlur={this.updateAboutInfo}/>
+              <Label>Profession</Label>
+              <Input type="text" id="job" defaultValue={user.info && user.info.job ? user.info.job : ''} onBlur={this.updateAboutInfo}/>
+              <Label>Residence</Label>
+              <Input type="text" id="location" defaultValue={user.info && user.info.location ? user.info.location : ''} onBlur={this.updateAboutInfo}/>
+              <Label>Birthday</Label>
+              <Input type="text" id="birthday" defaultValue={user.info && user.info.birthday ? user.info.birthday : ''} onBlur={this.updateAboutInfo}/>
             </CardBody>
           </Card>
           <Card className="profile-card">
             <CardBody>
               <h5>Favorites</h5>
-                <React.Fragment>
-                  <Label>Band</Label>
-                  <Input type="text" id="band" defaultValue={user.favorites && user.favorites.band ? user.favorites.band : ''} onBlur={this.updateFavInfo}/>
-                </React.Fragment>
-                <React.Fragment>
-                  <Label>Sports Team</Label>
-                  <Input type="text" id="team" defaultValue={user.favorites && user.favorites.team ? user.favorites.team : ''} onBlur={this.updateFavInfo}/>
-                </React.Fragment>
-                <React.Fragment>
-                  <Label>Celebrity</Label>
-                  <Input type="text" id="celebrity" defaultValue={user.favorites && user.favorites.celebrity ? user.favorites.celebrity : ''} onBlur={this.updateFavInfo}/>
-                </React.Fragment>
+              <Label>Band</Label>
+              <Input type="text" id="band" defaultValue={user.favorites && user.favorites.band ? user.favorites.band : ''} onBlur={this.updateFavInfo}/>
+              <Label>Sports Team</Label>
+              <Input type="text" id="team" defaultValue={user.favorites && user.favorites.team ? user.favorites.team : ''} onBlur={this.updateFavInfo}/>
+              <Label>Celebrity</Label>
+              <Input type="text" id="celebrity" defaultValue={user.favorites && user.favorites.celebrity ? user.favorites.celebrity : ''} onBlur={this.updateFavInfo}/>
             </CardBody>
           </Card>
           <Card className="profile-card">
