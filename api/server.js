@@ -28,17 +28,7 @@ app.use((req, res, next) => {
 });
 
 // Allow CORS (cross-origin) requests and non-standard methods (e.g. PUT/DELETE)
-const whitelist = ['http://localhost:3000', 'https://bookface-mock.herokuapp.com'];
-const corsOptions = {
-  origin: (origin, next) => {
-    if (whitelist.includes(origin)) {
-      next(null, true);
-    } else {
-      next(new Error('Not Allowed by CORS'));
-    }
-  }
-}
-app.use(cors(corsOptions));
+app.use(cors());
 app.options('*', cors());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(__dirname));
