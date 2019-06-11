@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
 mongoose
   .connect(process.env.DB, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => console.log('Database Connected'))
-  .catch((e) => console.log(e));
+  .catch((e) => console.log(e, process.env.IP));
 
 // Use Middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -68,6 +68,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '../../client/build/index.html'));
 });
 
-app.listen(process.env.PORT || config.port () => {
+app.listen(process.env.PORT || config.port, () => {
   console.log(`Server running on port ${process.env.PORT ? process.env.PORT : config.port}`);
 });
