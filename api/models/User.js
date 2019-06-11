@@ -29,6 +29,7 @@ const UserSchema = new Schema({
     type: String,
     maxlength: 2000
   },
+  photos: [String],
   hobbies: [String],
   info: {
     location: String,

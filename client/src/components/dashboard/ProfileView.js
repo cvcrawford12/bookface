@@ -16,7 +16,8 @@ class ProfileView extends Component {
     autoBind(this);
     this.state = {
       user: {},
-      showFriendsTab: false
+      showFriendsTab: false,
+      showPhotos: false
     }
   }
 
@@ -42,8 +43,12 @@ class ProfileView extends Component {
     this.setState({ showFriendsTab: true });
   }
 
-  closeFriendsTab() {
-    this.setState({ showFriendsTab: false });
+  togglePhotos() {
+    this.setState({ showPhotos: !this.state.showPhotos, showFriendsTab: false });
+  }
+
+  backToDash() {
+    this.setState({ showFriendsTab: false, showPhotos: false });
   }
 
   uploadFile(e) {
@@ -66,9 +71,9 @@ class ProfileView extends Component {
                 <img className="profile-img-top" alt="Profile" src={user.avatar && user.avatar !== '' ? user.avatar : Profile} />
                 <div className="d-inline-flex flex-row-reverse button-group">
                   <button onClick={this.showFriendsTab}>Friends</button>
-                  <button>Photos</button>
+                  <button onClick={this.togglePhotos}>Photos</button>
                   {!location.includes('/profile') && <button onClick={this.toggleEdit}>{location.includes('edit') ? 'Dashboard' : 'Edit'}</button>}
-                  <button onClick={this.closeFriendsTab}>{Context.fullName(user)}</button>
+                  <button onClick={this.backToDash}>{Context.fullName(user)}</button>
                   {location.includes('edit') &&
                     <React.Fragment>
                       <label htmlFor="avatarUpload" className="clickable"><i className="fas fa-camera"></i> Edit</label>
@@ -81,10 +86,10 @@ class ProfileView extends Component {
           </Loader>
         </Row>
         <Row className="profile-row">
-          {!location.includes('edit') && !this.state.showFriendsTab &&
+          {!location.includes('edit') && !this.state.showFriendsTab && !this.state.showPhotos &&
             <AboutSection user={user} loading={this.props.loading} posts={this.props.posts}/>
           }
-          {location.includes('edit') && !this.state.showFriendsTab &&
+          {location.includes('edit') && !this.state.showFriendsTab && !this.state.showPhotos &&
             <EditAboutSection user={this.props.user}/>
           }
           {this.state.showFriendsTab &&
@@ -95,6 +100,16 @@ class ProfileView extends Component {
                   <ProfileCard key={index} addOrDeleteFriend={this.props.addOrDeleteFriend} isFriendsTab={true} user={friend} />
                 )
               }) : null}
+            </Col>
+          }
+          {this.state.showPhotos && user.photos.length > 0 &&
+            <Col md="12" className="profile-col">
+              <h5>Photos</h5>
+              {user.photos.map((src, index) => {
+                return (
+                  <img className="img-fluid" src={src} key={index} alt=""/>
+                )
+              })}
             </Col>
           }
         </Row>

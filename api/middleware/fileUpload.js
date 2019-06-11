@@ -7,15 +7,15 @@ const multerS3 = require('multer-s3');
 const path = require('path');
 
 const s3 = new aws.S3({
-  accessKeyId: config.awsAccessKey,
-  secretAccessKey: config.awsSecretKey,
-  Bucket: config.awsBucket
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  Bucket: process.env.BUCKET
 });
 
 const storage = multer({
   storage: multerS3({
     s3: s3,
-    bucket: config.awsBucket,
+    bucket: process.env.BUCKET,
     key: (req, file, cb) => {
       crypto.randomBytes(16, (err, buf) => {
         if (err) cb(err);

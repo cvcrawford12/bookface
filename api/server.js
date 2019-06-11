@@ -7,6 +7,10 @@ const express = require('express'),
       config = require('./config/secret'),
       app = express();
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 // Require Routes (API endpoints)
 const authRoutes = require('./routes/auth');
 const socialRoutes = require('./routes/social');
@@ -14,7 +18,7 @@ const apiRoutes = require('./routes/api');
 
 // Intialize database
 mongoose
-  .connect(config.db, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
+  .connect(process.env.DB, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => console.log('Database Connected'))
   .catch((e) => console.log(e));
 
@@ -33,7 +37,7 @@ app.use((req, res, next) => {
 // Use JWT Authentication
 app.use((req, res, next) => {
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-    jwt.verify(req.headers.authorization.split(' ')[1], config.key, (err, decoded) => {
+    jwt.verify(req.headers.authorization.split(' ')[1], process.env.JWT_KEY, (err, decoded) => {
       if (err) {
         req.user = undefined;
         next();

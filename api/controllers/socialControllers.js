@@ -121,6 +121,11 @@ exports.createNewPost = (req, res) => {
   let newPost = new Post({ author: req.user._id, postText: req.body.postText });
   if (req.file) {
     newPost['image'] = req.file.location;
+    User.findOneAndUpdate({ _id: req.user._id }, {photos: req.file.location}, (error, user) => {
+      if (error) {
+        return res.status(400).json({error, message: 'Trouble adding image to users list of photos' })
+      }
+    })
   }
   newPost.save((error, post) => {
     if (error) {

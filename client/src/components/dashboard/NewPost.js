@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import autoBind from 'react-autobind';
-import { Modal, Button, ModalBody, FormGroup } from 'reactstrap';
-import { AvField, AvForm } from 'availity-reactstrap-validation';
+import { Modal, Button, ModalBody, FormGroup, InputGroup, Input, InputGroupAddon, Label } from 'reactstrap';
+import { AvField, AvForm, AvInput, AvGroup } from 'availity-reactstrap-validation';
 import Context from '../../actions/Context';
 import {AppContext} from '../../App';
 
@@ -47,6 +47,10 @@ class NewPost extends Component {
     })
   }
 
+  updateFileText(e) {
+    this.setState({ fileText: e.currentTarget.value.split('\\').pop() });
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -55,14 +59,15 @@ class NewPost extends Component {
           <ModalBody>
             <AvForm onValidSubmit={this.handleValidPost}>
               <AvField type="textarea" name="postText" id="postText" label="Post Text*" required/>
-              <InputGroup> className="mb-2 shadow comment-input">
-                <Label>Photo</Label>
-                <Input type="file" name="file" id="file"/>
-                <InputGroupAddon addOnType="append">
-                  <Button></Button>
-                </InputGroupAddon>
-              </InputGroup>
-              <AvField type="file" name="file" id="file" label="Post Image"/>
+              <AvGroup>
+                <Label for="file">Resume</Label>
+                <InputGroup>
+                  <div className="custom-file">
+                    <AvInput type="file" className="custom-file-input" onChange={this.updateFileText} name="file" id="file" />
+                    <label className="custom-file-label" htmlFor="file">{this.state.fileText}</label>
+                  </div>
+                </InputGroup>
+              </AvGroup>
               {this.state.errorMessage !== '' &&
                 <p className="text-danger">{this.state.errorMessage}</p>
               }

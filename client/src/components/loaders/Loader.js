@@ -8,7 +8,7 @@ class Loader extends Component {
       if (this.props.social) {
         return (
           <Container>
-            <Card>
+            <Card className="mb-2">
               <CardBody>
                 <SearchLoader />
               </CardBody>
