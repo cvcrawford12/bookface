@@ -77,7 +77,7 @@ class NewPost extends Component {
             <AvForm onValidSubmit={this.handleValidPost}>
               <AvField type="textarea" name="postText" id="postText" label="Post Text*" required/>
               <AvGroup>
-                <Label for="file">Resume</Label>
+                <Label for="file">Photo</Label>
                 <InputGroup>
                   <div className="custom-file">
                     <AvInput type="file" className="custom-file-input" onChange={this.updateFileText} name="file" id="file" />
